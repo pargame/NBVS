@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build NBVS (CMake)",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"set -euo pipefail\nif ! command -v brew >/dev/null 2>&1; then echo 'Homebrew not found. Install Homebrew first: https://brew.sh' >&2; exit 1; fi\nif ! pkg-config --exists glew; then echo 'Installing GLEW via Homebrew...'; brew install glew; fi\nif ! pkg-config --exists glfw3; then echo 'Installing GLFW via Homebrew...'; brew install glfw; fi\nif ! command -v cmake >/dev/null 2>&1; then echo 'Installing CMake via Homebrew...'; brew install cmake; fi\nmkdir -p build\ncd build\ncmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..\ncmake --build . --config RelWithDebInfo -j$(sysctl -n hw.ncpu | awk '{print int($1*0.75)}')\n"
+			],
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		}
+	]
+}
